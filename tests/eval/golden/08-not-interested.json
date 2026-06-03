@@ -1,0 +1,20 @@
+{
+  "id": "not-interested",
+  "description": "Caller clearly declines every proposal. Call Outcome not_interested, no visit.",
+  "tags": ["not-interested"],
+  "user_data": { "caller_name": "Pooja", "language_hint": "en" },
+  "transcript": "Agent: Hi Pooja, this is Priya from Brigade about the Hebbal project. Do you have a moment?\nCaller: I already bought a flat last month. Not looking anymore.\nAgent: Congratulations! Would you consider an investment unit?\nCaller: No, I'm done with real estate for now.\nAgent: Understood, thanks for your time.\nCaller: Bye.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Already purchased elsewhere; declined investment option too.", "objective": "not_interested", "confidence": 0.92, "confidence_label": "High" }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "false", "objective": "false", "confidence": 0.96, "confidence_label": "High" }
+    },
+    "Conversation": {
+      "Language Detected": { "subjective": "en", "objective": null, "confidence": 0.97, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "regex" } },
+      "Needs Human": { "subjective": "false", "objective": "false", "confidence": 0.87, "confidence_label": "High" },
+      "Hangup Reason": { "subjective": null, "objective": "caller_end", "confidence": 0.9, "confidence_label": "High" }
+    }
+  }
+}

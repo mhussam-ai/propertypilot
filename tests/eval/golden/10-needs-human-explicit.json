@@ -1,0 +1,20 @@
+{
+  "id": "needs-human-explicit",
+  "description": "Caller asks legal/loan questions the agent can't answer. The agent explicitly flags Needs Human = true (the explicit-signal path, distinct from the low-confidence path).",
+  "tags": ["needs-human"],
+  "user_data": { "caller_name": "Farhan", "language_hint": "en" },
+  "transcript": "Agent: Hi Farhan, this is Priya from Prestige about the Kochi project. Is now okay?\nCaller: Yes. Can you tell me the exact stamp duty, the NRI loan eligibility, and whether the title is litigation-free with the sub-registrar?\nAgent: Those are detailed legal and finance questions — let me have our relationship manager call you with precise answers.\nCaller: Okay, please have them call me tomorrow.\nAgent: Will arrange that. Thank you.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Genuinely interested but asked detailed legal/finance questions; needs RM follow-up.", "objective": "follow_up", "confidence": 0.84, "confidence_label": "High" }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "false", "objective": "false", "confidence": 0.9, "confidence_label": "High" }
+    },
+    "Conversation": {
+      "Language Detected": { "subjective": "en", "objective": null, "confidence": 0.96, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "regex" } },
+      "Needs Human": { "subjective": "true", "objective": "true", "confidence": 0.91, "confidence_label": "High", "reasoning_objective": "Caller asked stamp-duty, NRI-loan, and title-litigation questions beyond the agent's scope." },
+      "Hangup Reason": { "subjective": null, "objective": "agent_end", "confidence": 0.93, "confidence_label": "High" }
+    }
+  }
+}

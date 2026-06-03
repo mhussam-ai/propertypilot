@@ -1,0 +1,52 @@
+# PropertyPilot — local container stack (lean).
+#
+# PREREQUISITE: run the Supabase layer on the host first:
+#     supabase start
+# Supabase (Postgres + Auth + Realtime + RLS) is intentionally NOT containerized
+# here — the app reaches the host's Supabase via host.docker.internal. This keeps
+# fidelity with how the project actually runs and avoids vendoring Supabase's
+# ~10-service self-hosting stack. See README "Run with Docker".
+#
+# Then:  cp .env.example .env.local  (fill in secrets)  &&  docker compose up --build
+#
+# NEXT_PUBLIC_* are build-time in Next, so they are passed as build args (not env).
+# Override the anon key for full browser/auth flows:
+#     NEXT_PUBLIC_SUPABASE_ANON_KEY=$(supabase status -o env | ...) docker compose up --build
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://host.docker.internal:54321}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+        NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+    ports:
+      - "3000:3000"
+    # Runtime secrets (service-role key, KMS key, Bolna/Inngest/Resend). Copy
+    # .env.example → .env.local and fill in. NEXT_PUBLIC_* here are ignored at
+    # runtime (already inlined at build) and that's fine.
+    env_file:
+      - .env.local
+    environment:
+      # Let the Inngest SDK run in dev mode against the dev server below — no
+      # signing/event keys required for local container runs.
+      INNGEST_DEV: "1"
+    extra_hosts:
+      # Lets the in-container server resolve the host's `supabase start` stack.
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+
+  inngest:
+    image: inngest/inngest:latest
+    command: ["inngest", "dev", "-u", "http://app:3000/api/inngest", "--no-discovery"]
+    ports:
+      - "8288:8288"
+    depends_on:
+      - app

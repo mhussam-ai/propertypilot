@@ -1,0 +1,23 @@
+{
+  "id": "hindi",
+  "description": "Hindi-speaking caller books a Sunday evening visit. Language must resolve to 'hi'.",
+  "tags": ["hindi"],
+  "user_data": { "caller_name": "Ramesh", "language_hint": "hi" },
+  "transcript": "Agent: Namaste Ramesh ji, main Priya bol rahi hoon Lodha Group se. Do minute baat kar sakte hain?\nCaller: Haan boliye.\nAgent: Hamare paas 2 BHK hai 95 lakh se shuru. Aap kab visit kar sakte hain?\nCaller: Itwaar shaam ko aa sakta hoon, 5 baje.\nAgent: Theek hai, Sunday 5 baje site visit fix kar diya. Dhanyavaad!\nCaller: Theek hai, dhanyavaad.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Caller agreed in Hindi to a Sunday 5pm visit.", "objective": "interested", "confidence": 0.9, "confidence_label": "High" }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "true", "objective": "true", "confidence": 0.92, "confidence_label": "High" },
+      "Visit Day": { "subjective": "Sunday", "objective": null, "confidence": 0.9, "confidence_label": "High" },
+      "Visit Time": { "subjective": "2026-05-24T17:00:00", "objective": null, "confidence": 0.82, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "timestamp" } },
+      "BHK Preference": { "subjective": null, "objective": "2", "confidence": 0.85, "confidence_label": "High" }
+    },
+    "Conversation": {
+      "Language Detected": { "subjective": "hi", "objective": null, "confidence": 0.97, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "regex" } },
+      "Needs Human": { "subjective": "false", "objective": "false", "confidence": 0.88, "confidence_label": "High" },
+      "Hangup Reason": { "subjective": null, "objective": "agent_end", "confidence": 0.95, "confidence_label": "High" }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "accent-garbled",
+  "description": "Heavy regional accent + poor line. ASR is uncertain so the critical Call Outcome is Low-confidence — must route to Manual Review via the low-confidence path.",
+  "tags": ["accent-garbled", "low-confidence"],
+  "user_data": { "caller_name": "Murugan", "language_hint": "ta" },
+  "transcript": "Agent: Hello, am I speaking with Murugan? This is about the OMR Chennai project.\nCaller: [crackle] ...aamaa... naan... [inaudible] ...veedu paakanum...\nAgent: Sorry, the line is breaking up. Are you interested in viewing the property?\nCaller: [garbled] ...maybe... [static] ...call... later...\nAgent: I'll have someone call you back. Thank you.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Line was breaking up; intent unclear, possibly a callback request.", "objective": "follow_up", "confidence": 0.42, "confidence_label": "Low", "reasoning_objective": "ASR confidence low due to noise; caller may have asked to be called later." }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "false", "objective": "false", "confidence": 0.55, "confidence_label": "Medium" }
+    },
+    "Conversation": {
+      "Language Detected": { "subjective": "ta", "objective": null, "confidence": 0.5, "confidence_label": "Medium", "validation": { "is_valid": true, "expected_type": "regex" } },
+      "Needs Human": { "subjective": "true", "objective": "true", "confidence": 0.6, "confidence_label": "Medium", "reasoning_objective": "Transcript too noisy to trust the automated outcome." },
+      "Hangup Reason": { "subjective": null, "objective": "agent_end", "confidence": 0.7, "confidence_label": "Medium" }
+    }
+  }
+}

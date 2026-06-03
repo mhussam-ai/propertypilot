@@ -1,0 +1,39 @@
+# Mirrors .gitignore + build-time noise we never want in the image context.
+node_modules
+.pnpm-store
+.next
+out
+dist
+*.tsbuildinfo
+next-env.d.ts
+
+# Env (secrets are injected at runtime via compose, never baked)
+.env
+.env.local
+.env.*.local
+
+# Supabase local state
+supabase/.branches
+supabase/.temp
+supabase/.env
+
+# Tests, docs, scripts not needed to build/run the server
+tests
+docs
+coverage
+.vitest-cache
+eval-report.json
+
+# Tooling / OS / IDE
+.git
+.github
+.vscode
+.idea
+*.log
+*.bat
+.DS_Store
+Thumbs.db
+.vercel
+Dockerfile
+docker-compose.yml
+.dockerignore

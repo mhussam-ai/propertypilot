@@ -144,3 +144,25 @@ The plan explicitly cuts these and notes them in V2_ROADMAP:
 - RAG over property brochures.
 
 Each cut is a 15-minute conversation, not a 2-day build. Resist scope creep — the v1 demo is about the **platform around the agent**, not the longest feature list.
+
+---
+
+## 12. Bolna-hosted agent vs. self-hosted Pipecat + Gemini native audio
+
+**Decision**: use Bolna's hosted voice agent for the audio + reasoning pipeline, and build PropertyPilot as the platform around it. Do **not** self-host a realtime audio stack.
+
+**Why**:
+
+- **Latency / pipeline shape.** The two architectures are fundamentally different. A self-hosted **cascading** pipeline (STT → LLM → TTS) adds latency at every hop — speech-to-text, then a text LLM turn, then text-to-speech — and each hop is a place where barge-in and turn-taking can feel laggy. A **native audio-to-audio** model (e.g. Gemini native audio) collapses that into one model and is far better for sub-second, interruptible conversation. Either way, getting telephony-grade turn-taking right is weeks of tuning. Bolna already ships a tuned pipeline behind one API.
+- **Build-vs-buy in a one-week window.** Self-hosting means owning PSTN/telephony integration, VAD + interruption handling, DNC enforcement, TRAI/RERA-compliant calling guardrails, call recording, *and* a post-call extraction layer. Bolna ships all of that — including the Dispositions API with confidence + reasoning — out of the box. In a one-week build, re-implementing any one of those loses the platform story.
+- **The assignment.** Bolna usage was a requirement; this decision is about *how* to use it well, not whether.
+
+**Where self-hosting would win** (and when we'd revisit):
+
+- **Full control of the audio pipeline** — custom VAD, barge-in, emotion/prosody, swapping the audio model.
+- **Eval at the audio layer.** Our [`lib/eval/`](../lib/eval/scorer.ts) pipeline can only score the **disposition layer** (did the post-call extraction match ground truth?). It is blind to audio-layer failures — latency spikes, talk-over, bad endpointing — because Bolna owns that layer. A self-hosted Pipecat stack would let us instrument and eval the audio loop itself. This is the single biggest observability gap of the hosted choice, and the line at which self-hosting starts to pay for itself.
+- **Unit cost at scale.** Hosted per-minute pricing eventually loses to owned infra at very high volume.
+
+**Credibility note**: this isn't a default-to-the-easy-thing call. The author builds and operates a self-hosted **Pipecat** realtime stack day-to-day at CallLive.ai — i.e. has shipped the other side of this trade-off. Choosing hosted here is an informed decision about where the week's effort buys the most, not avoidance of the harder path.
+
+**Rejected alternative**: self-host Pipecat + Gemini native audio for this submission. Rejected for v1 on time-to-value; explicitly the right move once audio-layer control and audio-layer eval become the bottleneck.

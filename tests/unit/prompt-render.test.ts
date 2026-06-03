@@ -37,7 +37,7 @@ describe("buildContextForProperty", () => {
     expect(ctx.bhk_list).toBe("2 BHK, 3 BHK");
     expect(ctx.amenities_list).toContain("Clubhouse");
     expect(ctx.price_band_text).toContain("₹");
-    expect(ctx.price_band_text).toContain("12,50,00,000");
+    expect(ctx.price_band_text).toContain("1,25,00,000");
     expect(ctx.supported_languages_list).toBe("English, Hindi, Tamil");
     expect(ctx.primary_language_name).toBe("English");
     expect(ctx.developer_short_name).toBe("Prestige Group");

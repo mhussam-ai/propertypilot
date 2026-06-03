@@ -1,0 +1,20 @@
+{
+  "id": "dnc-request",
+  "description": "Caller explicitly asks to never be called again. Call Outcome must be dnc_request; no visit.",
+  "tags": ["dnc-request"],
+  "user_data": { "caller_name": "Vikram", "language_hint": "en" },
+  "transcript": "Agent: Hello Vikram, this is Priya from DLF about the Gurugram project.\nCaller: How did you get my number? Please remove me from your list and don't call again.\nAgent: I understand, I'll remove you right away. Apologies for the disturbance.\nCaller: Thank you. Bye.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Caller demanded removal from the calling list.", "objective": "dnc_request", "confidence": 0.96, "confidence_label": "High" }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "false", "objective": "false", "confidence": 0.98, "confidence_label": "High" }
+    },
+    "Conversation": {
+      "Language Detected": { "subjective": "en", "objective": null, "confidence": 0.97, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "regex" } },
+      "Needs Human": { "subjective": "false", "objective": "false", "confidence": 0.83, "confidence_label": "High" },
+      "Hangup Reason": { "subjective": null, "objective": "caller_end", "confidence": 0.9, "confidence_label": "High" }
+    }
+  }
+}

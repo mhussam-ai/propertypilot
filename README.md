@@ -100,14 +100,30 @@ pnpm inngest:dev
 pnpm replay-webhook
 ```
 
-## Tests
+## Run with Docker
+
+Proves PropertyPilot is a deployable system, not a localhost script. The image is a lean Next.js [standalone](next.config.ts) build; Supabase (Auth + Realtime + RLS) stays on the host via the CLI by design (see the header in [`docker-compose.yml`](docker-compose.yml)).
 
 ```bash
-pnpm test              # unit tests (webhook auth, dispositions zod, prompt render, AES, CSV, breaker)
+supabase start                 # host Supabase layer (Auth/Realtime/RLS)
+cp .env.example .env.local     # fill in secrets (runtime-injected, never baked into the image)
+docker compose up --build      # app on :3000, Inngest dev server on :8288
+curl localhost:3000/api/health # → { "ok": true, ... }
+```
+
+`NEXT_PUBLIC_*` are inlined by Next at **build** time, so they're Docker build args (defaulting to `host.docker.internal` so the in-container server reaches the host's Supabase). For full browser/auth flows, pass your local anon key: `NEXT_PUBLIC_SUPABASE_ANON_KEY=… docker compose up --build`. For the rich dev loop, `pnpm dev` + `pnpm inngest:dev` is still the fastest path; Docker is the deploy-fidelity path.
+
+## Tests & evaluation
+
+```bash
+pnpm test              # unit + eval scorer (webhook auth, dispositions zod, AES, CSV, breaker, eval golden-corpus)
 pnpm test:integration  # RLS isolation, webhook idempotency (requires Supabase running)
+pnpm eval              # LIVE AI-quality eval vs a real Bolna agent (opt-in; needs BOLNA_PLATFORM_API_KEY + EVAL_AGENT_ID)
 pnpm typecheck
 pnpm lint
 ```
+
+The **evaluation pipeline** ([`lib/eval/scorer.ts`](lib/eval/scorer.ts) + golden corpus in [`tests/eval/golden/`](tests/eval/golden/)) scores disposition extraction against labelled transcripts: per-disposition + critical-field accuracy, confidence calibration, and a **false-booking rate** (the "hallucinated approval" safety metric, hard-gated to 0). The offline scorer runs in CI; `pnpm eval` runs it live and writes `eval-report.json`. Each golden case maps to a row in [FAILURE_MODES.md](docs/FAILURE_MODES.md).
 
 ---
 

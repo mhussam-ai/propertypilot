@@ -1,0 +1,23 @@
+{
+  "id": "code-switch",
+  "description": "Caller starts in English then switches to Marathi mid-call; primary language resolves to 'mr'. Books a visit.",
+  "tags": ["code-switch"],
+  "user_data": { "caller_name": "Sachin", "language_hint": "en" },
+  "transcript": "Agent: Hi Sachin, this is Priya from Kalpataru about the Thane project. Is now okay?\nCaller: Yes yes. Actually... marathi madhe bolu shakto ka?\nAgent: Nakkich. Aapan 2 BHK baddal bolto aahot, 85 lakh paasun. Visit kadhi karu shakta?\nCaller: Shanivari sakali bara vajta yeto.\nAgent: Mast, Saturday 12pm fix kela. Dhanyavaad!\nCaller: Dhanyavaad.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Switched to Marathi, agreed to Saturday noon visit.", "objective": "interested", "confidence": 0.87, "confidence_label": "High" }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "true", "objective": "true", "confidence": 0.89, "confidence_label": "High" },
+      "Visit Day": { "subjective": "Saturday", "objective": null, "confidence": 0.86, "confidence_label": "High" },
+      "Visit Time": { "subjective": "2026-05-23T12:00:00", "objective": null, "confidence": 0.78, "confidence_label": "Medium", "validation": { "is_valid": true, "expected_type": "timestamp" } },
+      "BHK Preference": { "subjective": null, "objective": "2", "confidence": 0.84, "confidence_label": "High" }
+    },
+    "Conversation": {
+      "Language Detected": { "subjective": "mr", "objective": null, "confidence": 0.81, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "regex" } },
+      "Needs Human": { "subjective": "false", "objective": "false", "confidence": 0.8, "confidence_label": "High" },
+      "Hangup Reason": { "subjective": null, "objective": "agent_end", "confidence": 0.93, "confidence_label": "High" }
+    }
+  }
+}

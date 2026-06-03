@@ -1,0 +1,25 @@
+{
+  "id": "english-happy",
+  "description": "English happy path — caller confirms a specific day + time, budget, and purpose.",
+  "tags": ["english-happy"],
+  "user_data": { "caller_name": "Aditya Mehra", "language_hint": "en" },
+  "transcript": "Agent: Namaste Aditya, this is Priya from Prestige Group about Falcon City Bangalore. Is this a good time?\nCaller: Yes, go ahead.\nAgent: We have 2 and 3 BHK in the 1.2 to 2.1 crore range. Which were you considering?\nCaller: 3 BHK, budget around 1.8 crore.\nAgent: Self-use or investment?\nCaller: Self-use, for my family.\nAgent: Can I book you a site visit this Saturday at 11 AM?\nCaller: Yes Saturday 11 AM works.\nAgent: Booked. We'll WhatsApp directions. Thank you!\nCaller: Thanks bye.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Agreed to a Saturday 11am visit, confirmed budget and purpose.", "objective": "interested", "confidence": 0.94, "confidence_label": "High" }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "true", "objective": "true", "confidence": 0.97, "confidence_label": "High" },
+      "Visit Day": { "subjective": "Saturday", "objective": null, "confidence": 0.95, "confidence_label": "High" },
+      "Visit Time": { "subjective": "2026-05-23T11:00:00", "objective": null, "confidence": 0.88, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "timestamp" } },
+      "BHK Preference": { "subjective": null, "objective": "3", "confidence": 0.96, "confidence_label": "High" },
+      "Budget INR": { "subjective": "18000000", "objective": null, "confidence": 0.91, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "numeric" } },
+      "Purpose": { "subjective": null, "objective": "self", "confidence": 0.93, "confidence_label": "High" }
+    },
+    "Conversation": {
+      "Language Detected": { "subjective": "en", "objective": null, "confidence": 0.99, "confidence_label": "High", "validation": { "is_valid": true, "expected_type": "regex" } },
+      "Needs Human": { "subjective": "false", "objective": "false", "confidence": 0.9, "confidence_label": "High" },
+      "Hangup Reason": { "subjective": null, "objective": "agent_end", "confidence": 0.97, "confidence_label": "High" }
+    }
+  }
+}

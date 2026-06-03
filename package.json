@@ -22,7 +22,8 @@
     "supabase:reset": "supabase db reset",
     "supabase:types": "supabase gen types typescript --local > lib/supabase/database.types.ts",
     "seed": "tsx scripts/seed-demo.ts",
-    "replay-webhook": "tsx scripts/replay-webhook.ts"
+    "replay-webhook": "tsx scripts/replay-webhook.ts",
+    "eval": "tsx scripts/eval-live.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

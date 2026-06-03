@@ -3,6 +3,8 @@ import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Lean, self-contained server bundle for the Docker runtime image (see Dockerfile).
+  output: "standalone",
   async headers() {
     return [
       {

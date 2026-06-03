@@ -1,0 +1,20 @@
+{
+  "id": "wrong-person",
+  "description": "Person who answered is not the lead. Call Outcome wrong_person, Caller Name Confirmed false.",
+  "tags": ["wrong-person"],
+  "user_data": { "caller_name": "Suresh", "language_hint": "en" },
+  "transcript": "Agent: Hello, am I speaking with Suresh?\nCaller: No, this is his brother. Suresh doesn't live here anymore, this is my phone now.\nAgent: Apologies for the confusion. Are you yourself looking for property?\nCaller: No, not interested. Please update your records.\nAgent: Will do, thank you.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Reached the lead's brother; number reassigned.", "objective": "wrong_person", "confidence": 0.93, "confidence_label": "High" }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "false", "objective": "false", "confidence": 0.97, "confidence_label": "High" }
+    },
+    "Conversation": {
+      "Caller Name Confirmed": { "subjective": "false", "objective": "false", "confidence": 0.94, "confidence_label": "High", "reasoning_objective": "Respondent stated they are not the named lead." },
+      "Needs Human": { "subjective": "false", "objective": "false", "confidence": 0.82, "confidence_label": "High" },
+      "Hangup Reason": { "subjective": null, "objective": "wrong_person", "confidence": 0.9, "confidence_label": "High" }
+    }
+  }
+}

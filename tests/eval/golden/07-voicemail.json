@@ -1,0 +1,19 @@
+{
+  "id": "voicemail",
+  "description": "Call answered by voicemail. No real conversation; Hangup Reason voicemail, no visit, no human needed.",
+  "tags": ["voicemail"],
+  "user_data": { "caller_name": "Anil", "language_hint": "en" },
+  "transcript": "Voicemail: You have reached the voicemail of 98XXXXXX21. Please leave a message after the tone.\nAgent: Hi, this is Priya from Sobha about the Bangalore project. I'll try you again later. Thank you.",
+  "expected": {
+    "Lead Quality": {
+      "Call Outcome": { "subjective": "Reached voicemail; no contact made.", "objective": "follow_up", "confidence": 0.88, "confidence_label": "High" }
+    },
+    "Visit Details": {
+      "Visit Promised": { "subjective": "false", "objective": "false", "confidence": 0.97, "confidence_label": "High" }
+    },
+    "Conversation": {
+      "Needs Human": { "subjective": "false", "objective": "false", "confidence": 0.86, "confidence_label": "High" },
+      "Hangup Reason": { "subjective": null, "objective": "voicemail", "confidence": 0.95, "confidence_label": "High" }
+    }
+  }
+}
