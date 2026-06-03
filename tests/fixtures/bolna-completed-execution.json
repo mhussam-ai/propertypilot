@@ -1,0 +1,105 @@
+{
+  "id": "exec_01HSAMPLEDEMO0001",
+  "agent_id": "agt_01HSAMPLEDEMO0001",
+  "status": "completed",
+  "conversation_time": 142,
+  "cost": 18.5,
+  "recording_url": "https://bolna-public.s3.amazonaws.com/sample-recordings/demo.mp3",
+  "transcript": "Agent: Namaste Aditya, this is Priya from Prestige Group about Falcon City Bangalore. Is this a good time?\nCaller: Yes, go ahead.\nAgent: We have 2 and 3 BHK in the 1.2 to 2.1 crore range. Which configuration were you considering?\nCaller: 3 BHK, budget around 1.8 crore.\nAgent: Are you looking for self-use or investment?\nCaller: Self-use, for my family.\nAgent: Perfect. Can I book you a site visit this Saturday at 11 AM?\nCaller: Yes Saturday 11 AM works.\nAgent: Booked. We'll WhatsApp directions. Thank you!\nCaller: Thanks bye.",
+  "hangup_reason": "agent_end",
+  "answered_by_voice_mail": false,
+  "to_number": "+919876543210",
+  "from_number": "+919999000000",
+  "telephony_provider": "plivo",
+  "to_number_carrier": "Airtel",
+  "user_data": {
+    "caller_name": "Aditya Mehra",
+    "language_hint": "en",
+    "lead_source": "portal_99acres",
+    "timezone": "Asia/Kolkata"
+  },
+  "extracted_data": {
+    "Lead Quality": {
+      "Call Outcome": {
+        "subjective": "Caller agreed to visit Saturday 11am and confirmed budget + purpose.",
+        "objective": "interested",
+        "confidence": 0.94,
+        "confidence_label": "High",
+        "reasoning_subjective": "Caller affirmed each proposal without hesitation.",
+        "reasoning_objective": "Customer agreed to a next step (site visit) with a confirmed slot."
+      }
+    },
+    "Visit Details": {
+      "Visit Promised": {
+        "subjective": "true",
+        "objective": "true",
+        "confidence": 0.97,
+        "confidence_label": "High",
+        "reasoning_objective": "Specific day AND time were agreed."
+      },
+      "Visit Day": {
+        "subjective": "Saturday",
+        "objective": null,
+        "confidence": 0.95,
+        "confidence_label": "High"
+      },
+      "Visit Time": {
+        "subjective": "2026-05-23T11:00:00",
+        "objective": null,
+        "confidence": 0.88,
+        "confidence_label": "High",
+        "validation": { "is_valid": true, "expected_type": "timestamp" }
+      },
+      "BHK Preference": {
+        "subjective": null,
+        "objective": "3",
+        "confidence": 0.96,
+        "confidence_label": "High"
+      },
+      "Budget INR": {
+        "subjective": "18000000",
+        "objective": null,
+        "confidence": 0.91,
+        "confidence_label": "High",
+        "validation": { "is_valid": true, "expected_type": "numeric" }
+      },
+      "Purpose": {
+        "subjective": null,
+        "objective": "self",
+        "confidence": 0.93,
+        "confidence_label": "High"
+      }
+    },
+    "Conversation": {
+      "Language Detected": {
+        "subjective": "en",
+        "objective": null,
+        "confidence": 0.99,
+        "confidence_label": "High",
+        "validation": { "is_valid": true, "expected_type": "regex" }
+      },
+      "Caller Name Confirmed": {
+        "subjective": "true",
+        "objective": "true",
+        "confidence": 0.92,
+        "confidence_label": "High"
+      },
+      "Needs Human": {
+        "subjective": "false",
+        "objective": "false",
+        "confidence": 0.9,
+        "confidence_label": "High"
+      },
+      "Hangup Reason": {
+        "subjective": null,
+        "objective": "agent_end",
+        "confidence": 0.99,
+        "confidence_label": "High"
+      }
+    }
+  },
+  "retry_count": 0,
+  "retry_history": [],
+  "created_at": "2026-05-18T14:32:11Z",
+  "updated_at": "2026-05-18T14:34:33Z"
+}
