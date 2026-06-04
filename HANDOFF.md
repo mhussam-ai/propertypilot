@@ -240,3 +240,19 @@ Per `DEMO_SCRIPT.md` step 6 (1:30 of demo): record three real Bolna calls — En
 5. **Engineering discipline** — Zod validation at every boundary, type-safe Inngest event catalog, two-stage prompt rendering, deferred features clearly listed in `V2_ROADMAP.md` rather than half-built.
 
 That's the submission. Ship it.
+
+---
+
+## 7. Type-safety hardening + dependency skew (2026-06-04)
+
+`pnpm typecheck` / `pnpm lint` / `next build` were red on a fresh checkout (CI was failing). Root-caused and fixed to fully green (typecheck 0 errors, lint 0 warnings, 90/90 tests, `next build` produces the standalone server). What was wrong and what changed:
+
+- **Dependency version skew (the root cause).** `@supabase/supabase-js` floated to **2.106** via `^2.47.10`, while `@supabase/ssr` stayed at **0.5.2** and the `supabase` CLI devDep at **1.226**. Consequences:
+  - The Supabase clients were created **without the `<Database>` generic** (`admin.ts`, `server.ts`, `client.ts`), so the whole data layer was unchecked. Typed them.
+  - `@supabase/ssr@0.5.2` can't thread the `Database` generic into supabase-js 2.106, so `createServerClient<Database>().from().select()` collapses to `never`. **Interim fix:** `lib/supabase/server.ts` asserts the real runtime type (`as unknown as SupabaseClient<Database>`). **Follow-up:** upgrade `@supabase/ssr` to a 2.x-aligned version and delete that cast.
+  - `database.types.ts` was committed as **UTF-16** (PowerShell `>` redirect) — ESLint read it as "binary". Regenerated as **UTF-8 with a v2 CLI** (`npx supabase@latest gen types`). NOTE: `pnpm supabase:types` uses the pinned 1.x CLI and PowerShell `>` — regenerating with it reintroduces both bugs. Bump the `supabase` devDep to ^2 (and write UTF-8) before relying on that script.
+- **Real bug found: `call_status` enum was missing `initiated`.** Bolna emits `initiated`, and `call-start.ts` persists Bolna's status verbatim, so a real call would fail the enum check. Added migration `0004_add_initiated_call_status.sql` (+ the value in `database.types.ts`).
+- **Write-payload conformance.** Once the admin client was typed, genuine mismatches surfaced (status literals widened to `string`, app objects assigned to `Json` jsonb columns, arrays typed `Record<string,unknown>[]`). Fixed by typing the arrays/objects to the generated `Insert`/`Update`/`Enums` types and casting jsonb fields to `Json` at the persistence boundary.
+- **Security: removed `test-bolna.ts`** — an unreferenced scratch script with a hardcoded Bolna API key. **ACTION REQUIRED: rotate/revoke that key** (`bn-8f0d…`) since it was committed to history.
+
+**Recommended follow-up (separate PR):** upgrade `@supabase/ssr` → drop the `server.ts` cast; pin `@supabase/supabase-js` and the `supabase` CLI to a mutually-aligned set; make `supabase:types` write UTF-8 cross-platform.

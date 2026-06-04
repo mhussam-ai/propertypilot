@@ -42,7 +42,11 @@ export async function updateBolnaCredentials(input: unknown): Promise<UpdateBoln
       });
       // GET /v2/agent/all is rate-limited at 500/min; one call is fine.
       // We don't need to inspect the response — just confirm 2xx.
-      await client["request" as never]({ method: "GET", path: "/v2/agent/all", label: "validate-key" });
+      await (
+        client as unknown as {
+          request: (init: { method: string; path: string; label: string }) => Promise<unknown>;
+        }
+      ).request({ method: "GET", path: "/v2/agent/all", label: "validate-key" });
     } catch (err) {
       logger.warn({ err: String(err) }, "Bolna API key validation failed");
       return {

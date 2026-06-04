@@ -104,7 +104,6 @@ export default async function CallDetailPage({ params }: RouteProps) {
             <CardTitle>Recording</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <audio controls src={call.recording_url} className="w-full" />
             <p className="mt-2 text-xs text-muted-foreground">
               Recording URL is a Bolna-provided signed URL.

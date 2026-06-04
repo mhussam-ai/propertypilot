@@ -8,6 +8,7 @@ import { BolnaApiError, BolnaClient } from "@/lib/bolna/client";
 import { PropertyFormSchema } from "@/lib/schema/property-form";
 import { buildCanonicalDispositions } from "@/lib/dispositions/canonical";
 import { buildBookVisitTool } from "@/lib/bolna/tools";
+import type { Json } from "@/lib/supabase/database.types";
 import {
   buildContextForProperty,
   renderPropertyPrompt,
@@ -189,7 +190,7 @@ export async function createProperty(input: unknown): Promise<CreatePropertyResu
     version: 1,
     template_name: SITE_VISIT_TEMPLATE,
     template_text: renderedPrompt,
-    template_vars: ctx as unknown as Record<string, unknown>,
+    template_vars: ctx as unknown as Json,
     voice_id: data.default_voice_id,
     created_by: tenant.userId,
   });
@@ -215,8 +216,8 @@ export async function createProperty(input: unknown): Promise<CreatePropertyResu
         is_subjective: d.is_subjective ?? false,
         is_objective: d.is_objective ?? false,
         subjective_type: d.subjective_type ?? null,
-        subjective_type_config: d.subjective_type_config ?? null,
-        objective_options: d.objective_options ?? null,
+        subjective_type_config: (d.subjective_type_config ?? null) as unknown as Json,
+        objective_options: (d.objective_options ?? null) as unknown as Json,
         version: 1,
       }));
       await admin.from("dispositions").insert(rows);

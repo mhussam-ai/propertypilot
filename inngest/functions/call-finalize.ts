@@ -2,12 +2,12 @@ import { inngest } from "@/inngest/client";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import {
   WebhookPayloadSchema,
-  type ExtractedDataT,
   isVisitPromised,
   needsHumanReview,
   detectedLanguage,
 } from "@/lib/schema/outcome";
 import { logger } from "@/lib/logger";
+import type { Database, Json } from "@/lib/supabase/database.types";
 
 /**
  * call.webhook.ingested: read the raw call_event row, hydrate the calls table,
@@ -48,14 +48,14 @@ export const callFinalize = inngest.createFunction(
         .eq("tenant_id", tenantId)
         .maybeSingle();
 
-      const update: Record<string, unknown> = {
-        status: status as string,
+      const update: Database["public"]["Tables"]["calls"]["Update"] = {
+        status: status as Database["public"]["Enums"]["call_status"],
         cost_inr: payload.cost ?? null,
         duration_s: payload.conversation_time ?? null,
         hangup_reason: payload.hangup_reason ?? null,
         recording_url: payload.recording_url ?? null,
         transcript: payload.transcript ?? null,
-        extracted_data: (payload.extracted_data ?? null) as unknown as ExtractedDataT | null,
+        extracted_data: (payload.extracted_data ?? null) as unknown as Json,
         answered_by_voice_mail: payload.answered_by_voice_mail ?? null,
         telephony_provider: payload.telephony_provider ?? null,
         to_number_carrier: payload.to_number_carrier ?? null,
@@ -95,7 +95,7 @@ export const callFinalize = inngest.createFunction(
     // Flatten dispositions into the queryable table.
     if (payload.extracted_data) {
       await step.run("upsert-disposition-results", async () => {
-        const rows: Array<Record<string, unknown>> = [];
+        const rows: Database["public"]["Tables"]["call_disposition_results"]["Insert"][] = [];
         for (const [category, dispositions] of Object.entries(payload.extracted_data ?? {})) {
           for (const [name, result] of Object.entries(dispositions)) {
             const objArray = Array.isArray(result.objective) ? result.objective : null;
@@ -112,7 +112,7 @@ export const callFinalize = inngest.createFunction(
               confidence_label: result.confidence_label,
               reasoning_subjective: result.reasoning_subjective ?? null,
               reasoning_objective: result.reasoning_objective ?? null,
-              validation: result.validation ?? null,
+              validation: (result.validation ?? null) as unknown as Json,
             });
           }
         }

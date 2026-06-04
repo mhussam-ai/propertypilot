@@ -3,6 +3,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { authenticateWebhook, extractClientIp, idempotencyKey } from "@/lib/bolna/auth-webhook";
 import { decrypt } from "@/lib/crypto/aes-gcm";
 import { WebhookPayloadSchema } from "@/lib/schema/outcome";
+import type { Json } from "@/lib/supabase/database.types";
 import { inngest } from "@/inngest/client";
 import { logger } from "@/lib/logger";
 
@@ -106,7 +107,7 @@ export async function POST(req: Request, ctx: RouteContext) {
       kind: "status_update",
       status: payload.status,
       retry_count: payload.retry_count ?? 0,
-      payload: payload as unknown as Record<string, unknown>,
+      payload: payload as unknown as Json,
       source_ip: ip,
       idempotency_key: idemKey,
     })

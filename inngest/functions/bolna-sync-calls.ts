@@ -3,6 +3,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { BolnaClient } from "@/lib/bolna/client";
 import { decrypt } from "@/lib/crypto/aes-gcm";
 import { logger } from "@/lib/logger";
+import type { Database, Json } from "@/lib/supabase/database.types";
 
 /**
  * bolna.sync-calls: poll Bolna for in-flight call status updates.
@@ -16,7 +17,7 @@ const TERMINAL_STATUSES = new Set([
   "completed", "failed", "error", "no-answer", "busy", "voicemail",
 ]);
 
-const BOLNA_TO_LEAD_STATUS: Record<string, string> = {
+const BOLNA_TO_LEAD_STATUS: Record<string, Database["public"]["Enums"]["lead_status"]> = {
   "completed": "contacted",
   "failed": "exhausted",
   "error": "exhausted",
@@ -79,14 +80,14 @@ export const bolnaSyncCalls = inngest.createFunction(
           if (exec.status === call.status) continue;
 
           const td = exec.telephony_data;
-          const update: Record<string, unknown> = {
-            status: exec.status,
+          const update: Database["public"]["Tables"]["calls"]["Update"] = {
+            status: exec.status as Database["public"]["Enums"]["call_status"],
             cost_inr: exec.total_cost ?? null,
             duration_s: exec.conversation_duration ?? td?.duration ?? null,
             hangup_reason: td?.hangup_reason ?? null,
             recording_url: td?.recording_url ?? null,
             transcript: exec.transcript ?? null,
-            extracted_data: exec.extracted_data ?? null,
+            extracted_data: (exec.extracted_data ?? null) as unknown as Json,
             answered_by_voice_mail: exec.answered_by_voice_mail ?? null,
             retry_count: exec.retry_count ?? 0,
             from_number: td?.from_number ?? exec.agent_number ?? null,

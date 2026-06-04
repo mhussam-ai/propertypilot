@@ -57,7 +57,7 @@ export async function copyLeads(
     language_hint: l.language_hint,
     source: "campaign_copy",
     custom_vars: l.custom_vars,
-    status: "new",
+    status: "new" as const,
   }));
 
   // Perform a single big upsert, ignoring duplicates on (campaign_id, phone_e164).

@@ -12,6 +12,7 @@ import type {
   DispositionRecord,
   ExecutionRecord,
   ListExecutionsResponse,
+  RetryConfig,
   ScheduleBatchRequest,
   StartCallRequest,
   StartCallResponse,
@@ -223,7 +224,7 @@ export class BolnaClient {
     agentId: string;
     csv: Blob | File;
     fromPhoneNumber?: string;
-    retryConfig?: import("./types").RetryConfig;
+    retryConfig?: RetryConfig;
   }): Promise<BatchRecord> {
     const form = new FormData();
     form.append("agent_id", args.agentId);

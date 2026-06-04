@@ -1,4 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "./database.types";
 
 /**
  * Service-role Supabase client. BYPASSES RLS.
@@ -9,7 +10,7 @@ import { createClient } from "@supabase/supabase-js";
  *   - inside seed and admin scripts
  * Never expose to the browser or import from a Server Component you might render to a tenant user.
  */
-let singleton: ReturnType<typeof createClient> | null = null;
+let singleton: SupabaseClient<Database> | null = null;
 
 export function createSupabaseAdminClient() {
   if (singleton) return singleton;
@@ -18,7 +19,7 @@ export function createSupabaseAdminClient() {
   if (!url || !serviceRole) {
     throw new Error("Supabase admin client requires NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY");
   }
-  singleton = createClient(url, serviceRole, {
+  singleton = createClient<Database>(url, serviceRole, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   return singleton;

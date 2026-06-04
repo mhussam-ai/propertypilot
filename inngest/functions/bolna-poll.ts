@@ -3,6 +3,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { BolnaClient } from "@/lib/bolna/client";
 import { decrypt } from "@/lib/crypto/aes-gcm";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/lib/supabase/database.types";
 
 /**
  * bolna.poll-executions: nightly DR reconcile.
@@ -66,7 +67,7 @@ export const bolnaPoll = inngest.createFunction(
             kind: "reconcile",
             status: exec.status,
             retry_count: exec.retry_count ?? 0,
-            payload: exec as unknown as Record<string, unknown>,
+            payload: exec as unknown as Json,
             source_ip: "reconcile",
             idempotency_key: idemKey,
           });

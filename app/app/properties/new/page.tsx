@@ -178,6 +178,7 @@ function Field({
   label: string;
   as?: "textarea";
   className?: string;
+  rows?: number;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, "name">) {
   return (
     <div className={className}>

@@ -7,6 +7,9 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getTenantContext } from "@/lib/tenant/context";
 import { LeadCsvRowSchema, extractCustomVars } from "@/lib/schema/lead-csv";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/lib/supabase/database.types";
+
+type LeadInsert = Database["public"]["Tables"]["leads"]["Insert"];
 
 export interface UploadLeadsResult {
   ok: boolean;
@@ -64,7 +67,7 @@ export async function uploadLeads(input: { campaign_id: string; csv_text: string
   }
 
   const rows = parsed.data ?? [];
-  const upserts: Array<Record<string, unknown>> = [];
+  const upserts: LeadInsert[] = [];
   const rejected: Array<{ rowIndex: number; reason: string }> = [];
 
   for (let i = 0; i < rows.length; i++) {

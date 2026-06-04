@@ -6,6 +6,7 @@ import { decrypt } from "@/lib/crypto/aes-gcm";
 import { logger } from "@/lib/logger";
 import { rateLimit } from "@/lib/middleware/rate-limit";
 import { extractClientIp } from "@/lib/bolna/auth-webhook";
+import type { Database } from "@/lib/supabase/database.types";
 
 export const runtime = "nodejs";
 
@@ -88,7 +89,7 @@ export async function POST(req: Request) {
 
   const accepted: string[] = [];
   const rejected: Array<{ phone: string; reason: string }> = [];
-  const upserts: Array<Record<string, unknown>> = [];
+  const upserts: Database["public"]["Tables"]["leads"]["Insert"][] = [];
 
   for (const lead of parsed.data.leads) {
     const pn = parsePhoneNumberFromString(lead.phone, "IN");
